@@ -1,4 +1,4 @@
-## Pre-reqs
+## Pre-reqs(this code is only used for research only, any other purpose please contact me.
 
 1. download the AI challenger keypoint dataset(see the following link.)
 ```
