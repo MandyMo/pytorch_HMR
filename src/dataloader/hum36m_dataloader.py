@@ -1,11 +1,4 @@
 
-'''
-    file:   hum36m_dataloader.py
-
-    author: zhangxiong(1025679612@qq.com)
-    date:   2018_05_09
-    purpose:  load hum3.6m data
-'''
 
 import sys
 from torch.utils.data import Dataset, DataLoader
