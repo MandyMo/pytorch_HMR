@@ -1,10 +1,4 @@
 
-'''
-    file:   lsp_ext_dataloader.py
-
-    author: zhangxiong(1025679612@qq.com)
-    date:   2018_05_07
-'''
 import sys
 from torch.utils.data import Dataset, DataLoader
 import scipy.io as scio  
