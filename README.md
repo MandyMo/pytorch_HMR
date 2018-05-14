@@ -1,7 +1,5 @@
 ## Pre-reqs
 
-### Download required models
-
 1. download the AI challenger keypoint dataset(see the following link.)
 ```
 [AI challenger] https://challenger.ai/datasets/keypoint
