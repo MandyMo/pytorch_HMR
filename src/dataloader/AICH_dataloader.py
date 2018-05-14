@@ -1,11 +1,4 @@
 
-'''
-    file:   AICH_dataloader.py
-
-    author: zhangxiong(1025679612@qq.com)
-    date:   2018_05_08
-    purpose:    load ai challenge dataset
-'''
 
 import sys
 from torch.utils.data import Dataset, DataLoader
