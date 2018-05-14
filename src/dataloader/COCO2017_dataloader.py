@@ -1,11 +1,4 @@
 
-'''
-    file:   COCO2017_dataloader.py
-
-    author: zhangxiong(1025679612@qq.com)
-    date:   2018_05_09
-    purpose:  load COCO 2017 keypoint dataset
-'''
 
 import sys
 from torch.utils.data import Dataset, DataLoader
