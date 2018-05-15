@@ -1,5 +1,5 @@
 ## Pre-reqs(this code is only used for research only, any other purpose please contact me.
-
+### training step
 1. download the AI challenger keypoint dataset(see the following link.)
 ```
 [AI challenger] https://challenger.ai/datasets/keypoint
@@ -42,3 +42,11 @@ I split it into 6 parts.(5 parts about image, 1 part about annotations)
 10. please read the config.py carefully and change the correspond config.(both resnet50 and hourglass are supported for encoder)
 
 11. run do_train.sh(maybe you should change it's config, if you don't has so many GPU.)
+
+### reference papers
+1. Stacked Hourglass Networks for Human Pose Estimation
+2. SMPL: A Skinned Multi-Person Linear Model
+3. Keep it SMPL: Automatic Estimation of 3D Human Pose and Shape from a Single Image
+4. Mosh motion and shape capture from sparse markers
+5. Unite the People: Closing the Loop Between 3D and 2D Human Representations
+6. End-to-end Recovery of Human Shape and Pose
