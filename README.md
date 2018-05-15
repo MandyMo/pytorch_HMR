@@ -1,22 +1,22 @@
 ## Pre-reqs(this code is only used for research only, any other purpose please contact me.
+
 ### training step
-#### 1. download the following datasets.
-  1. [AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
-  2. [lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
-  3. [lsp 14-keypoint extension dataset](https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA)
-  4. [COCO-2017-keypoint dataset](http://cocodataset.org/)
-  5. [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A)
-  6. [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
+  #### 1. download the following datasets.
+    1. [AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
+    2. [lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
+    3. [lsp 14-keypoint extension dataset](https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA)
+    4. [COCO-2017-keypoint dataset](http://cocodataset.org/)
+    5. [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A)
+    6. [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
 
-#### 2. download the following datasets.
-  1. to be continue
+  #### 2. download the following datasets.
+    1. to be continue
 
-
-
-
-
-
-8. extract the model.zip file
+  ### 3. unzip the downloaded datasets.
+  
+  ### 4. unzip the model.zip
+  ### 5. config the softward environment by modify the src/config.py and do_train.sh
+  ### 6. run ./do_train.sh directly
 
 9. install pytorch0.4 and some other required packages such as numpy、scipy、h5py and so on.
 
