@@ -44,9 +44,9 @@ I split it into 6 parts.(5 parts about image, 1 part about annotations)
 11. run do_train.sh(maybe you should change it's config, if you don't has so many GPU.)
 
 ### reference papers
-1. [Stacked Hourglass Networks for Human Pose Estimation] (https://arxiv.org/abs/1603.06937)
-2. SMPL: A Skinned Multi-Person Linear Model
-3. Keep it SMPL: Automatic Estimation of 3D Human Pose and Shape from a Single Image
-4. Mosh motion and shape capture from sparse markers
-5. Unite the People: Closing the Loop Between 3D and 2D Human Representations
-6. End-to-end Recovery of Human Shape and Pose
+1. [Stacked Hourglass Networks for Human Pose Estimation](https://arxiv.org/abs/1603.06937)
+2. [SMPL: A Skinned Multi-Person Linear Model](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
+3. [Keep it SMPL: Automatic Estimation of 3D Human Pose and Shape from a Single Image](https://pdfs.semanticscholar.org/4cea/52b44fc5cb1803a07fa466b6870c25535313.pdf)
+4. [motion and shape capture from sparse markers](http://files.is.tue.mpg.de/black/papers/MoSh.pdf)
+5. [Unite the People: Closing the Loop Between 3D and 2D Human Representations](https://arxiv.org/abs/1701.02468)
+6. [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584)
