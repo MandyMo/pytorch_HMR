@@ -1,6 +1,6 @@
 ## HMR
 <p align="center">
- <img src="./image/paper_picked.png" width="400px">
+ <img src="./images/paper_picked.png" width="800px">
 </p>
 This is a **pytorch** implementation of [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584) by *Angjoo Kanazawa, Michael J. Black, David W. Jacobs*, and *Jitendra Malik*, accompanying by some famous human pose estimation networks and datasets. 
 
