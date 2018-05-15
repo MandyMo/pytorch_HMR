@@ -1,6 +1,8 @@
-## code used for research only, any problem please contact me
+## HMR
+This is a pytorch implementation of [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584) by *Angjoo Kanazawa, Michael J. Black, David W. Jacobs*, and *Jitendra Malik*, accompanying by some famous human pose estimation networks and datasets. 
 
-### training step
+
+## training step
 #### 1. download the following datasets.
 - [AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
 - [lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
