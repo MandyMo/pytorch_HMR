@@ -20,6 +20,12 @@
 
 ### environment configurations.
   - install ***pytorch0.4***
+  - install torchvision
+  - install numpy
+  - install scipy
+  - install h5py
+  - install opencv-python
+  
 
 10. please read the config.py carefully and change the correspond config.(both resnet50 and hourglass are supported for encoder)
 
