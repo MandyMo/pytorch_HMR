@@ -15,7 +15,12 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
 - [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A) 
 - [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
 #### 2. download human3.6 datasets.
-    1. to be continue
+- [hum3.6m_part_1.zip](https://pan.baidu.com/s/1oeO213vrKyYEr46P1OBEgw)
+- [hum3.6m_part_2.zip](https://pan.baidu.com/s/1XRnNn0qJeo5TECacjiJv4g)
+- [hum3.6m_part_3.zip](https://pan.baidu.com/s/15AOngXr3zya2XsK7Sry97g)
+- [hum3.6m_part_4.zip](https://pan.baidu.com/s/1RNqWSP1KREBhvPHn6-pCbA)
+- [hum3.6m_part_5.zip](https://pan.baidu.com/s/109RwxgpWxEraXzIXf7iYkg)
+- [hum3.6m_anno.zip](https://pan.baidu.com/s/1kCOQ2qzf69RLX3VN4cw5Mw)
 #### 3. unzip the downloaded datasets.
 #### 4. unzip the model.zip
 #### 5. config the environment by modify the src/config.py and do_train.sh
@@ -29,8 +34,6 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
   - install h5py
   - install opencv-python
   
-
-
 ## reference papers
 - [Stacked Hourglass Networks for Human Pose Estimation](https://arxiv.org/abs/1603.06937)
 - [SMPL: A Skinned Multi-Person Linear Model](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
