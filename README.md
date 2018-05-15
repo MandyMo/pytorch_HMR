@@ -9,16 +9,17 @@
 - [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A) 
 - [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
 
-  #### 2. download the following datasets.
+#### 2. download the following datasets.
     1. to be continue
 
-  ### 3. unzip the downloaded datasets.
+### 3. unzip the downloaded datasets.
   
-  ### 4. unzip the model.zip
-  ### 5. config the softward environment by modify the src/config.py and do_train.sh
-  ### 6. run ./do_train.sh directly
+### 4. unzip the model.zip
+### 5. config the softward environment by modify the src/config.py and do_train.sh
+### 6. run ./do_train.sh directly
 
-9. install pytorch0.4 and some other required packages such as numpy、scipy、h5py and so on.
+### environment configurations.
+  - install pytorch0.4
 
 10. please read the config.py carefully and change the correspond config.(both resnet50 and hourglass are supported for encoder)
 
