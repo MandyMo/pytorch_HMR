@@ -7,31 +7,32 @@
 
 2. download the lsp dataset
 ```
-[lsp] http://sam.johnson.io/research/lsp.html
+[lsp] https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A
 ```
 3. download the lsp_ext dataset
 ```
-[lsp exp] http://sam.johnson.io/research/lsp.html
+[lsp exp] https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA
 ```
 
 4. download the COCO_2017 dataset
 ```
-[COCO_2017] https://coco.com
+[COCO_2017] http://cocodataset.org/
 ```
 
 5. download the mpi_inf_3dhp dataset
 ```
-[mpi_inf_3dhp] https://mpi_inf_3dhp
+[mpi_inf_3dhp] https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A
 ```
 
 6. download the human3.6m dataset
 ```
-[human_4.6m] https://human3.6m
+I split it into 6 parts.(5 parts about image, 1 part about annotations)
+
 ```
 
 7. download the mosh dataset
 ```
-[mosh] https://mosh.com
+[mosh] https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA
 ```
 
 8. extract the model.zip file
@@ -41,22 +42,3 @@
 10. please read the config.py carefully and change the correspond config.(current resnet50 and hourglass is supported for encoder)
 
 11. run do_train.sh(maybe you should change it's config, if you don't has so many GPU.)
-
-
-If you use any of the MoSh data, please cite: 
-```
-article{Loper:SIGASIA:2014,
-  title = {{MoSh}: Motion and Shape Capture from Sparse Markers},
-  author = {Loper, Matthew M. and Mahmood, Naureen and Black, Michael J.},
-  journal = {ACM Transactions on Graphics, (Proc. SIGGRAPH Asia)},
-  volume = {33},
-  number = {6},
-  pages = {220:1--220:13},
-  publisher = {ACM},
-  address = {New York, NY, USA},
-  month = nov,
-  year = {2014},
-  url = {http://doi.acm.org/10.1145/2661229.2661273},
-  month_numeric = {11}
-}
-```
