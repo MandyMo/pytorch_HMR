@@ -10,10 +10,10 @@
 - [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
 #### 2. download human3.6 datasets.
     1. to be continue
-### 3. unzip the downloaded datasets.
-### 4. unzip the model.zip
-### 5. config the softward environment by modify the src/config.py and do_train.sh
-### 6. run ./do_train.sh directly
+#### 3. unzip the downloaded datasets.
+#### 4. unzip the model.zip
+#### 5. config the softward environment by modify the src/config.py and do_train.sh
+#### 6. run ./do_train.sh directly
 
 ### environment configurations.
   - install ***pytorch0.4***
@@ -24,9 +24,6 @@
   - install opencv-python
   
 
-10. please read the config.py carefully and change the correspond config.(both resnet50 and hourglass are supported for encoder)
-
-11. run do_train.sh(maybe you should change it's config, if you don't has so many GPU.)
 
 ### reference papers
 - [Stacked Hourglass Networks for Human Pose Estimation](https://arxiv.org/abs/1603.06937)
