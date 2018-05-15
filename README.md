@@ -8,12 +8,9 @@
 - [COCO-2017-keypoint dataset](http://cocodataset.org/)
 - [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A) 
 - [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
-
-#### 2. download the following datasets.
+#### 2. download human3.6 datasets.
     1. to be continue
-
 ### 3. unzip the downloaded datasets.
-  
 ### 4. unzip the model.zip
 ### 5. config the softward environment by modify the src/config.py and do_train.sh
 ### 6. run ./do_train.sh directly
