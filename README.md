@@ -2,12 +2,12 @@
 
 ### training step
 #### 1. download the following datasets.
-[AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
-[lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
-[lsp 14-keypoint extension dataset](https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA)
-[COCO-2017-keypoint dataset](http://cocodataset.org/)
-[mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A) 
-[mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
+- [AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
+- [lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
+- [lsp 14-keypoint extension dataset](https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA)
+- [COCO-2017-keypoint dataset](http://cocodataset.org/)
+- [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A) 
+- [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
 
   #### 2. download the following datasets.
     1. to be continue
