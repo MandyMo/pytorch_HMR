@@ -39,6 +39,6 @@ I split it into 6 parts.(5 parts about image, 1 part about annotations)
 
 9. install pytorch0.4 and some other required packages such as numpy、scipy、h5py and so on.
 
-10. please read the config.py carefully and change the correspond config.(current resnet50 and hourglass is supported for encoder)
+10. please read the config.py carefully and change the correspond config.(both resnet50 and hourglass are supported for encoder)
 
 11. run do_train.sh(maybe you should change it's config, if you don't has so many GPU.)
