@@ -1,39 +1,20 @@
 ## Pre-reqs(this code is only used for research only, any other purpose please contact me.
 ### training step
-1. download the AI challenger keypoint dataset(see the following link.)
-```
-[AI challenger] https://challenger.ai/datasets/keypoint
-```
+#### 1. download the following datasets.
+  1. [AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
+  2. [lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
+  3. [lsp 14-keypoint extension dataset](https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA)
+  4. [COCO-2017-keypoint dataset](http://cocodataset.org/)
+  5. [mpi_inf_3dhp 3d keypoint dataset](https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A)
+  6. [mosh dataset, which used for adv training](https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA)
 
-2. download the lsp dataset
-```
-[lsp] https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A
-```
-3. download the lsp_ext dataset
-```
-[lsp exp] https://pan.baidu.com/s/1uUcsdCKbzIwKCc9SzVFXAA
-```
+#### 2. download the following datasets.
+  1. to be continue
 
-4. download the COCO_2017 dataset
-```
-[COCO_2017] http://cocodataset.org/
-```
 
-5. download the mpi_inf_3dhp dataset
-```
-[mpi_inf_3dhp] https://pan.baidu.com/s/1XQZNV3KPtiBi5ODnr7RB9A
-```
 
-6. download the human3.6m dataset
-```
-I split it into 6 parts.(5 parts about image, 1 part about annotations)
 
-```
 
-7. download the mosh dataset
-```
-[mosh] https://pan.baidu.com/s/1OWzeMeLS5tKx1XGAiyZ0XA
-```
 
 8. extract the model.zip file
 
@@ -52,7 +33,7 @@ I split it into 6 parts.(5 parts about image, 1 part about annotations)
 6. [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584)
 
 ### reference resources
-1. [up-3d](http://files.is.tuebingen.mpg.de/classner/up/)
-2. [coco-2017](http://cocodataset.org/)
-3. [human 3.6m](http://vision.imar.ro/human3.6m/description.php)
-4. [ai challenger](https://challenger.ai/)
+1. [up-3d dataset](http://files.is.tuebingen.mpg.de/classner/up/)
+2. [coco-2017 dataset](http://cocodataset.org/)
+3. [human 3.6m datas](http://vision.imar.ro/human3.6m/description.php)
+4. [ai challenger dataset](https://challenger.ai/)
