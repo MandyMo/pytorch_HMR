@@ -19,7 +19,7 @@
 ### 6. run ./do_train.sh directly
 
 ### environment configurations.
-  - install pytorch0.4
+  - install ***pytorch0.4***
 
 10. please read the config.py carefully and change the correspond config.(both resnet50 and hourglass are supported for encoder)
 
