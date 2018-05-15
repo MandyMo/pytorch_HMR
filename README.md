@@ -21,7 +21,7 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
 #### 5. config the softward environment by modify the src/config.py and do_train.sh
 #### 6. run ./do_train.sh directly
 
-### environment configurations.
+## environment configurations.
   - install **pytorch0.4**
   - install torchvision
   - install numpy
@@ -31,7 +31,7 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
   
 
 
-### reference papers
+## reference papers
 - [Stacked Hourglass Networks for Human Pose Estimation](https://arxiv.org/abs/1603.06937)
 - [SMPL: A Skinned Multi-Person Linear Model](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
 - [Keep it SMPL: Automatic Estimation of 3D Human Pose and Shape from a Single Image](https://pdfs.semanticscholar.org/4cea/52b44fc5cb1803a07fa466b6870c25535313.pdf)
@@ -39,7 +39,7 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
 - [Unite the People: Closing the Loop Between 3D and 2D Human Representations](https://arxiv.org/abs/1701.02468)
 - [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584)
 
-### reference resources
+## reference resources
 - [up-3d dataset](http://files.is.tuebingen.mpg.de/classner/up/)
 - [coco-2017 dataset](http://cocodataset.org/)
 - [human 3.6m datas](http://vision.imar.ro/human3.6m/description.php)
