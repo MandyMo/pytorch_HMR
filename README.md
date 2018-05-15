@@ -1,4 +1,4 @@
-## Pre-reqs(code used for research only, any problem please contact me)
+## code used for research only, any problem please contact me
 
 ### training step
 #### 1. download the following datasets.
