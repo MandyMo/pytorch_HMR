@@ -50,3 +50,9 @@ I split it into 6 parts.(5 parts about image, 1 part about annotations)
 4. [motion and shape capture from sparse markers](http://files.is.tue.mpg.de/black/papers/MoSh.pdf)
 5. [Unite the People: Closing the Loop Between 3D and 2D Human Representations](https://arxiv.org/abs/1701.02468)
 6. [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584)
+
+### reference resources
+1. [up-3d](http://files.is.tuebingen.mpg.de/classner/up/)
+2. [coco-2017](http://cocodataset.org/)
+3. [human 3.6m](http://vision.imar.ro/human3.6m/description.php)
+4. [ai challenger](https://challenger.ai/)
