@@ -18,7 +18,7 @@ This is a **pytorch** implementation of [End-to-end Recovery of Human Shape and 
 #### 6. run ./do_train.sh directly
 
 ### environment configurations.
-  - install ***pytorch0.4***
+  - install **pytorch0.4**
   - install torchvision
   - install numpy
   - install scipy
