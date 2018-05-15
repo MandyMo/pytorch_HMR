@@ -44,7 +44,7 @@ I split it into 6 parts.(5 parts about image, 1 part about annotations)
 11. run do_train.sh(maybe you should change it's config, if you don't has so many GPU.)
 
 ### reference papers
-1. Stacked Hourglass Networks for Human Pose Estimation
+1. [Stacked Hourglass Networks for Human Pose Estimation] (https://arxiv.org/abs/1603.06937)
 2. SMPL: A Skinned Multi-Person Linear Model
 3. Keep it SMPL: Automatic Estimation of 3D Human Pose and Shape from a Single Image
 4. Mosh motion and shape capture from sparse markers
