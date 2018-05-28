@@ -1,4 +1,11 @@
 
+'''
+    file:   util.py
+
+    date:   2018_04_29
+    author: zhangxiong(1025679612@qq.com)
+'''
+
 import h5py
 import torch
 import numpy as np
@@ -7,6 +14,8 @@ import json
 from torch.autograd import Variable
 import torch.nn.functional as F
 import cv2
+import math
+from scipy import interpolate
 
 def load_mean_theta():
     mean = np.zeros(args.total_theta_count, dtype = np.float)
@@ -128,18 +137,53 @@ def calc_aabb(ptSets):
 
     return ptLeftTop, ptRightBottom, len(ptSets) >= 5
 
+'''
+    calculate a obb for a set of points
+
+    inputs: 
+        ptSets: a set of points
+
+    return the center and 4 corners of a obb
+'''
+def calc_obb(ptSets):
+    ca = np.cov(ptSets,y = None,rowvar = 0,bias = 1)
+    v, vect = np.linalg.eig(ca)
+    tvect = np.transpose(vect)
+    ar = np.dot(ptSets,np.linalg.inv(tvect))
+    mina = np.min(ar,axis=0)
+    maxa = np.max(ar,axis=0)
+    diff    = (maxa - mina)*0.5
+    center  = mina + diff
+    corners = np.array([center+[-diff[0],-diff[1]],center+[diff[0],-diff[1]],center+[diff[0],diff[1]],center+[-diff[0],diff[1]]])
+    corners = np.dot(corners, tvect)
+    return corners[0], corners[1], corners[2], corners[3]
+
 def get_image_cut_box(leftTop, rightBottom, ExpandsRatio, Center = None):
+    try:
+        l = len(ExpandsRatio)
+    except:
+        ExpandsRatio = [ExpandsRatio, ExpandsRatio, ExpandsRatio, ExpandsRatio]
+
+    def _expand_crop_box(lt, rb, scale):
+        center = (lt + rb) / 2.0
+        xl, xr, yt, yb = lt[0] - center[0], rb[0] - center[0], lt[1] - center[1], rb[1] - center[1]
+        xl, xr, yt, yb = xl * scale[0], xr * scale[1], yt * scale[2], yb * scale[3]
+        #expand it
+        lt, rb = np.array([center[0] + xl, center[1] + yt]), np.array([center[0] + xr, center[1] + yb])
+        lb, rt = np.array([center[0] + xl, center[1] + yb]), np.array([center[0] + xr, center[1] + yt])
+        center = (lt + rb) / 2
+        return center, lt, rt, rb, lb
+
     if Center == None:
         Center = (leftTop + rightBottom) // 2
+
+    Center, leftTop, rightTop, rightBottom, leftBottom = _expand_crop_box(leftTop, rightBottom, ExpandsRatio)
 
     offset = (rightBottom - leftTop) // 2
 
     cx = offset[0]
     cy = offset[1]
 
-    cx = int(cx * ExpandsRatio)
-    cy = int(cy * ExpandsRatio)
-    
     r = max(cx, cy)
 
     cx = r
@@ -239,7 +283,9 @@ def cut_image(filePath, kps, expand_ratio, leftTop, rightBottom):
     channels     = originImage.shape[2] if len(originImage.shape) >= 3 else 1
 
     leftTop, rightBottom = get_image_cut_box(leftTop, rightBottom, expand_ratio)
-    leftTop, rightBottom = shrink(leftTop, rightBottom, width, height)
+    
+    #remove extra space.
+    #leftTop, rightBottom = shrink(leftTop, rightBottom, width, height)
 
     lt = [int(leftTop[0]), int(leftTop[1])]
     rb = [int(rightBottom[0]), int(rightBottom[1])]
@@ -253,7 +299,7 @@ def cut_image(filePath, kps, expand_ratio, leftTop, rightBottom):
     rightBottom  = [int(rightBottom[0] + 0.5), int(rightBottom[1] + 0.5)]
 
     dstImage = np.zeros(shape = [rightBottom[1] - leftTop[1], rightBottom[0] - leftTop[0], channels], dtype = np.uint8)
-    dstImage[:,:,:] = 30
+    dstImage[:,:,:] = 0
 
     offset = [lt[0] - leftTop[0], lt[1] - leftTop[1]]
     size   = [rb[0] - lt[0], rb[1] - lt[1]]
@@ -263,34 +309,157 @@ def cut_image(filePath, kps, expand_ratio, leftTop, rightBottom):
 
 '''
     purpose:
+        reflect key point, when the image is reflect by left-right
+    
+    inputs:
+        kps:3d key point(14 x 3)
+
+    marks:
+        the key point is given by lsp order.
+'''
+def reflect_lsp_kp(kps):
+    kp_map = [5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7, 6, 12, 13]
+    joint_ref = kps[kp_map]
+    joint_ref[:,0] = -joint_ref[:,0]
+
+    return joint_ref - np.mean(joint_ref, axis = 0)
+
+'''
+    purpose:
+        reflect poses, when the image is reflect by left-right
+    
+    inputs:
+        poses: 72 real number
+'''
+def reflect_pose(poses):
+    swap_inds = np.array([
+            0, 1, 2, 6, 7, 8, 3, 4, 5, 9, 10, 11, 15, 16, 17, 12, 13, 14, 18,
+            19, 20, 24, 25, 26, 21, 22, 23, 27, 28, 29, 33, 34, 35, 30, 31, 32,
+            36, 37, 38, 42, 43, 44, 39, 40, 41, 45, 46, 47, 51, 52, 53, 48, 49,
+            50, 57, 58, 59, 54, 55, 56, 63, 64, 65, 60, 61, 62, 69, 70, 71, 66,
+            67, 68
+    ])
+
+    sign_flip = np.array([
+            1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1,
+            -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1,
+            -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1,
+            1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1, -1, 1, -1,
+            -1, 1, -1, -1
+    ])
+
+    return poses[swap_inds] * sign_flip
+
+'''
+    purpose:
+        crop the image
+    inputs:
+        image_path: the 
+'''
+def crop_image(image_path, angle, lt, rb, scale, kp_2d, crop_size):
+    '''
+        given a crop box, expand it at 4 directions.(left, right, top, bottom)
+    '''
+    assert 'error algorithm exist.' and 0
+
+    def _expand_crop_box(lt, rb, scale):
+        center = (lt + rb) / 2.0
+        xl, xr, yt, yb = lt[0] - center[0], rb[0] - center[0], lt[1] - center[1], rb[1] - center[1]
+        xl, xr, yt, yb = xl * scale[0], xr * scale[1], yt * scale[2], yb * scale[3]
+        #expand it
+        lt, rb = np.array([center[0] + xl, center[1] + yt]), np.array([center[0] + xr, center[1] + yb])
+        lb, rt = np.array([center[0] + xl, center[1] + yb]), np.array([center[0] + xr, center[1] + yt])
+        center = (lt + rb) / 2
+        return center, lt, rt, rb, lb
+    
+    '''
+        extend the box to square
+    '''
+    def _extend_box(center, lt, rt, rb, lb, crop_size):
+        lx, ly = np.linalg.norm(rt - lt), np.linalg.norm(lb - lt)
+        dx, dy = (rt - lt) / lx, (lb - lt) / ly
+        l = max(lx, ly) / 2.0
+        return center - l * dx - l * dy, center + l * dx - l *dy, center + l * dx + l * dy, center - l * dx + l * dy, dx, dy, crop_size * 1.0 / l
+
+    def _get_sample_points(lt, rt, rb, lb, crop_size):
+        vec_x = rt - lt
+        vec_y = lb - lt
+        i_x, i_y = np.meshgrid(range(crop_size), range(crop_size))
+        i_x = i_x.astype(np.float)
+        i_y = i_y.astype(np.float)
+        i_x /= float(crop_size)
+        i_y /= float(crop_size)
+        interp_points = i_x[..., np.newaxis].repeat(2, axis=2) * vec_x + i_y[..., np.newaxis].repeat(2, axis=2) * vec_y
+        interp_points += lt
+        return interp_points
+
+    def _sample_image(src_image, interp_points):
+        sample_method = 'nearest'
+        interp_image = np.zeros((interp_points.shape[0] * interp_points.shape[1], src_image.shape[2]))
+        i_x = range(src_image.shape[1])
+        i_y = range(src_image.shape[0])
+        flatten_interp_points = interp_points.reshape([interp_points.shape[0]*interp_points.shape[1], 2])
+        for i_channel in range(src_image.shape[2]):
+            interp_image[:, i_channel] = interpolate.interpn((i_y, i_x), src_image[:, :, i_channel],
+                                                            flatten_interp_points[:, [1, 0]], method = sample_method,
+                                                            bounds_error=False, fill_value=0)
+        interp_image = interp_image.reshape((interp_points.shape[0], interp_points.shape[1], src_image.shape[2]))
+    
+        return interp_image
+    
+    def _trans_kp_2d(kps, center, dx, dy, lt, ratio):
+        kp2d_offset = kps[:, :2] - center
+        proj_x, proj_y = np.dot(kp2d_offset, dx), np.dot(kp2d_offset, dy)
+        #kp2d = (dx * proj_x + dy * proj_y + lt) * ratio
+        for idx in range(len(kps)):
+            kps[idx, :2] = (dx * proj_x[idx] + dy * proj_y[idx] + lt) * ratio
+        return kps
+
+
+    src_image = cv2.imread(image_path)
+
+    center, lt, rt, rb, lb  = _expand_crop_box(lt, rb, scale)
+
+    #calc rotated box
+    radian = angle * np.pi / 180.0
+    v_sin, v_cos = math.sin(radian), math.cos(radian)
+
+    rot_matrix = np.array(
+        [
+            [v_cos, v_sin],
+            [-v_sin, v_cos]
+        ]
+    )
+
+    n_corner = (np.dot(rot_matrix, np.array([lt - center, rt - center, rb - center, lb - center]).T).T) + center
+    n_lt, n_rt, n_rb, n_lb = n_corner[0], n_corner[1], n_corner[2], n_corner[3] 
+    
+    lt, rt, rb, lb = calc_obb(np.array([lt, rt, rb, lb, n_lt, n_rt, n_rb, n_lb]))
+    lt, rt, rb, lb, dx, dy, ratio = _extend_box(center, lt, rt, rb, lb, crop_size = crop_size)
+    s_pts = _get_sample_points(lt, rt, rb, lb, crop_size)
+    dst_image = _sample_image(src_image, s_pts)
+    kp_2d = _trans_kp_2d(kp_2d, center, dx, dy, lt, ratio)
+
+    return dst_image, kp_2d
+
+
+'''
+    purpose:
         flip a image given by src_image and the 2d keypoints
     flip_mode: 
         0: horizontal flip
         >0: vertical flip
         <0: horizontal & vertical flip
 '''
-
-def flip_image(src_image, kps, flip_mode):
+def flip_image(src_image, kps):
     h, w = src_image.shape[0], src_image.shape[1]
+    src_image = cv2.flip(src_image, 1)
+    if kps is not None:
+        kps[:, 0] = w - 1 - kps[:, 0]
+        kp_map = [5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7, 6, 12, 13]
+        kps[:, :] = kps[kp_map]
 
-    if flip_mode == 0:
-        src_image = cv2.flip(src_image, 0)
-        if kps is not None:
-            kps[:, 1] = h - 1 - kps[:, 1]
-            kp_map = [5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7, 6, 12, 13]
-            kps[:, :] = kps[kp_map]
-    elif flip_mode > 0:
-        src_image = cv2.flip(src_image, 1)
-        if kps is not None:
-            kps[:, 0] = w - 1 - kps[:, 0]
-            kp_map = [5, 4, 3, 2, 1, 0, 11, 10, 9, 8, 7, 6, 12, 13]
-            kps[:, :] = kps[kp_map]
-    else:
-        src_image = cv2.flip(src_image, -1)
-        if kps is not None:
-            kps[:, 0] = w - 1 - kps[:, 0]
-            kps[:, 1] = h - 1 - kps[:, 1]
-    return src_image
+    return src_image, kps
 
 '''
     src_image: h x w x c
@@ -389,7 +558,7 @@ def convert_image_by_pixformat_normalize(src_image, pix_format, normalize):
         src_image = src_image.transpose((2, 0, 1))
     
     if normalize:
-        src_image = src_image.astype(np.float) / 255
+        src_image = (src_image.astype(np.float) / 255) * 2.0 - 1.0
     
     return src_image
 
@@ -400,17 +569,29 @@ def convert_image_by_pixformat_normalize(src_image, pix_format, normalize):
 def align_by_pelvis(joints):
     left_id = 3
     right_id = 2
-    pelvis = (joints[:, left_id, :] + joints[:, right_id, :]) / 2.
+    pelvis = (joints[:, left_id, :] + joints[:, right_id, :]) / 2.0
     return joints - torch.unsqueeze(pelvis, dim=1)
 
+def copy_state_dict(cur_state_dict, pre_state_dict, prefix = ''):
+    def _get_params(key):
+        key = prefix + key
+        if key in pre_state_dict:
+            return pre_state_dict[key]
+        return None
+    
+    for k in cur_state_dict.keys():
+        v = _get_params(k)
+        try:
+            if v is None:
+                print('parameter {} not found'.format(k))
+                continue
+            cur_state_dict[k].copy_(v)
+        except:
+            print('copy param {} failed'.format(k))
+            continue
 
 if __name__ == '__main__':
-    na = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], dtype = np.float)
-    va = Variable(torch.from_numpy(na.reshape(-1, 2, 3)))
-    
-    nb =  np.array([3, 2, 1, 1, 2, 3], dtype = np.float)
-    vb = Variable(torch.from_numpy(nb.reshape(2, 1, 3)))
-
-    print(va)
-    print(vb)
-    print(va - vb)
+    image_path = 'E:/HMR/data/COCO/images/train-valid2017/000000000009.jpg'
+    lt = np.array([-10, -10], dtype = np.float)
+    rb = np.array([10,10], dtype = np.float)
+    print(crop_image(image_path, 45, lt, rb, [1, 1, 1, 1], None))

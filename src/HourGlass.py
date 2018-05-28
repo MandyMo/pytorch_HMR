@@ -1,4 +1,11 @@
 
+'''
+    file:   hourglass.py
+
+    date:   2018_05_12
+    author: zhangxiong(1025679612@qq.com)
+'''
+
 from __future__ import print_function
 import numpy as np
 import torch

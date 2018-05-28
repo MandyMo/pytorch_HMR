@@ -1,4 +1,12 @@
 
+
+'''
+    file:   LinearModel.py
+
+    date:   2018_04_29
+    author: zhangxiong(1025679612@qq.com)
+'''
+
 import torch.nn as nn
 import numpy as np
 import sys

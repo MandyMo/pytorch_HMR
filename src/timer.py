@@ -1,4 +1,11 @@
 
+'''
+    file:   timer.py
+
+    date:   2018_05_09
+    author: zhangxiong(1025679612@qq.com)
+'''
+
 import time
 
 class Clock:

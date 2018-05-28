@@ -1,4 +1,12 @@
 
+'''
+    file:   Resnet.py
+
+    date:   2018_05_02
+    author: zhangxiong(1025679612@qq.com)
+    mark:   copied from pytorch sourc code
+'''
+
 import torch.nn as nn
 import torch.nn.functional as F
 import torch

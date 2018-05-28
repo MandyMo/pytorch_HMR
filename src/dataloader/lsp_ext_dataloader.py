@@ -1,4 +1,10 @@
 
+'''
+    file:   lsp_ext_dataloader.py
+
+    author: zhangxiong(1025679612@qq.com)
+    date:   2018_05_07
+'''
 import sys
 from torch.utils.data import Dataset, DataLoader
 import scipy.io as scio  
@@ -17,7 +23,7 @@ from timer import Clock
 
 
 class LspExtLoader(Dataset):
-    def __init__(self, data_set_path, use_crop, scale_range, use_flip, pix_format = 'NHWC', normalize = False):
+    def __init__(self, data_set_path, use_crop, scale_range, use_flip, pix_format = 'NHWC', normalize = False, flip_prob = 0.3):
         '''
             marks:
                 data_set path links to the parent folder to lsp, which contains images, joints.mat, README.txt
@@ -30,6 +36,7 @@ class LspExtLoader(Dataset):
         self.use_crop    = use_crop
         self.scale_range = scale_range
         self.use_flip    = use_flip
+        self.flip_prob   = flip_prob
         self.data_folder = data_set_path
         self.pix_format  = pix_format
         self.normalize   = normalize
@@ -77,33 +84,38 @@ class LspExtLoader(Dataset):
         kps = self.kp2ds[index].copy()
         box = self.boxs[index]
 
-        scale = random.uniform(self.scale_range[0], self.scale_range[1])
+        scale = np.random.rand(4) * (self.scale_range[1] - self.scale_range[0]) + self.scale_range[0]
         image, kps = cut_image(image_path, kps, scale, box[0], box[1])
-
         ratio = 1.0 * args.crop_size / image.shape[0]
-        kps[:, 0] *= ratio
-        kps[:, 1] *= ratio
+        kps[:, :2] *= ratio
         dst_image = cv2.resize(image, (args.crop_size, args.crop_size), interpolation = cv2.INTER_CUBIC)
-        if self.use_flip:
-            dst_image = flip_image(dst_image, kps, random.randint(-1, 1))
 
+        if self.use_flip and random.random() <= self.flip_prob:
+            dst_image, kps = flip_image(dst_image, kps)
+            
+        #normalize kp to [-1, 1]
+        ratio = 1.0 / args.crop_size
+        kps[:, :2] = 2.0 * kps[:, :2] * ratio - 1.0
+        
         return {
-            'image': torch.from_numpy(convert_image_by_pixformat_normalize(dst_image, self.pix_format, self.normalize)).float(),
-            'kp_2d': torch.from_numpy(kps).float(),
+            'image': torch.tensor(convert_image_by_pixformat_normalize(dst_image, self.pix_format, self.normalize)).float(),
+            'kp_2d': torch.tensor(kps).float(),
             'image_name': self.images[index],
             'data_set':'lsp_ext'
         }
 
 if __name__ == '__main__':
-    lsp = LspExtLoader('E:/HMR/data/lsp_ext', True, [1.5, 2.5], False)
+    lsp = LspExtLoader('E:/HMR/data/lsp_ext', True, [1.05, 1.5], False, flip_prob = 1.0)
     l = lsp.__len__()
 
     data_loader = DataLoader(lsp, batch_size=10,shuffle=True)
     
     for _ in range(l):
         r = lsp.__getitem__(_)
+        image = r['image'].cpu().numpy().astype(np.uint8)
+        kps = r['kp_2d'].cpu().numpy()
         base_name = os.path.basename(r['image_name'])
-        draw_lsp_14kp__bone(r['image'], r['kp_2d'])
-        cv2.imshow(base_name, cv2.resize(r['image'], (512, 512), interpolation = cv2.INTER_CUBIC))
+        draw_lsp_14kp__bone(image, kps)
+        cv2.imshow(base_name, cv2.resize(image, (512, 512), interpolation = cv2.INTER_CUBIC))
         cv2.waitKey(0)
     

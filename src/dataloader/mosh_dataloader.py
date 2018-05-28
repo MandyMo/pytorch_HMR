@@ -1,4 +1,11 @@
 
+'''
+    file:   mosh_dataloader.py
+
+    author: zhangxiong(1025679612@qq.com)
+    date:   2018_05_09
+    purpose:  load COCO 2017 keypoint dataset
+'''
 
 import sys
 from torch.utils.data import Dataset, DataLoader
@@ -13,14 +20,17 @@ import h5py
 import torch
 
 sys.path.append('./src')
-from util import calc_aabb, cut_image, flip_image, draw_lsp_14kp__bone, rectangle_intersect, get_rectangle_intersect_ratio
+from util import calc_aabb, cut_image, flip_image, draw_lsp_14kp__bone, rectangle_intersect, get_rectangle_intersect_ratio, reflect_pose
 from config import args
 from timer import Clock
 
 
 class mosh_dataloader(Dataset):
-    def __init__(self, data_set_path):
+    def __init__(self, data_set_path, use_flip = True, flip_prob = 0.3):
         self.data_folder = data_set_path
+        self.use_flip = use_flip
+        self.flip_prob = flip_prob
+
         self._load_data_set()
 
     def _load_data_set(self):
@@ -38,11 +48,16 @@ class mosh_dataloader(Dataset):
 
     def __getitem__(self, index):
         trival, pose, shape = np.zeros(3), self.poses[index], self.shapes[index]
+        
+        if self.use_flip and random.uniform(0, 1) <= self.flip_prob:#left-right reflect the pose
+            pose = reflect_pose(pose)
+
         return {
-            'theta': np.concatenate((trival, pose, shape), axis = 0)
+            'theta': torch.tensor(np.concatenate((trival, pose, shape), axis = 0)).float()
         }
 
 if __name__ == '__main__':
+    print(random.rand(1))
     mosh = mosh_dataloader('E:/HMR/data/mosh_gen')
     l = len(mosh)
     import time

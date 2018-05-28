@@ -1,4 +1,11 @@
 
+'''
+    file:   hum36m_dataloader.py
+
+    author: zhangxiong(1025679612@qq.com)
+    date:   2018_05_09
+    purpose:  load hum3.6m data
+'''
 
 import sys
 from torch.utils.data import Dataset, DataLoader
@@ -12,22 +19,24 @@ import h5py
 import torch
 
 sys.path.append('./src')
-from util import calc_aabb, cut_image, flip_image, draw_lsp_14kp__bone, rectangle_intersect, get_rectangle_intersect_ratio, convert_image_by_pixformat_normalize
+from util import calc_aabb, cut_image, flip_image, draw_lsp_14kp__bone, rectangle_intersect, get_rectangle_intersect_ratio, convert_image_by_pixformat_normalize, reflect_pose, reflect_lsp_kp
 from config import args
 from timer import Clock
 
 class hum36m_dataloader(Dataset):
-    def __init__(self, data_set_path, use_crop, scale_range, use_flip, min_pts_required, pix_format = 'NHWC', normalize = False):
+    def __init__(self, data_set_path, use_crop, scale_range, use_flip, min_pts_required, pix_format = 'NHWC', normalize = False, flip_prob = 0.3):
         self.data_folder = data_set_path
         self.use_crop = use_crop
         self.scale_range = scale_range
         self.use_flip = use_flip
+        self.flip_prob = flip_prob
         self.min_pts_required = min_pts_required
         self.pix_format = pix_format
         self.normalize = normalize
         self._load_data_set()
 
     def _load_data_set(self):
+        
         clk = Clock()
 
         self.images = []
@@ -82,27 +91,32 @@ class hum36m_dataloader(Dataset):
         image_path = self.images[index]
         kps = self.kp2ds[index].copy()
         box = self.boxs[index]
+        kp_3d = self.kp3ds[index].copy()
 
-        scale = random.uniform(self.scale_range[0], self.scale_range[1])
+        scale = np.random.rand(4) * (self.scale_range[1] - self.scale_range[0]) + self.scale_range[0]
         image, kps = cut_image(image_path, kps, scale, box[0], box[1])
 
         ratio = 1.0 * args.crop_size / image.shape[0]
-        kps[:, 0] *= ratio
-        kps[:, 1] *= ratio
+        kps[:, :2] *= ratio
         dst_image = cv2.resize(image, (args.crop_size, args.crop_size), interpolation = cv2.INTER_CUBIC)
 
-        if self.use_flip:
-            assert 0
-            dst_image = flip_image(dst_image, kps, random.randint(-1, 1))
-        
-        trival, pose, shape = np.zeros(3), self.shapes[index], self.poses[index]
+        trival, shape, pose = np.zeros(3), self.shapes[index], self.poses[index]
 
+        if self.use_flip and random.random() <= self.flip_prob:
+            dst_image, kps = flip_image(dst_image, kps)
+            pose = reflect_pose(pose)
+            kp_3d = reflect_lsp_kp(kp_3d)
+
+        #normalize kp to [-1, 1]
+        ratio = 1.0 / args.crop_size
+        kps[:, :2] = 2.0 * kps[:, :2] * ratio - 1.0
+        
         theta = np.concatenate((trival, pose, shape), axis = 0)
 
         return {
             'image': torch.from_numpy(convert_image_by_pixformat_normalize(dst_image, self.pix_format, self.normalize)).float(),
             'kp_2d': torch.from_numpy(kps).float(),
-            'kp_3d': torch.from_numpy(self.kp3ds[index]).float(),
+            'kp_3d': torch.from_numpy(kp_3d).float(),
             'theta': torch.from_numpy(theta).float(),
             'image_name': self.images[index],
             'w_smpl':1.0,
@@ -111,11 +125,8 @@ class hum36m_dataloader(Dataset):
         }
 
 if __name__ == '__main__':
-    h36m = hum36m_dataloader('E:/HMR/data/human3.6m', True, [1.1, 2.0], False, 5)
+    h36m = hum36m_dataloader('E:/HMR/data/human3.6m', True, [1.1, 2.0], True, 5, flip_prob = 1)
     l = len(h36m)
     for _ in range(l):
         r = h36m.__getitem__(_)
-        base_name = os.path.basename(r['image_name'])
-        draw_lsp_14kp__bone(r['image'], r['kp_2d'])
-        cv2.imshow(base_name, cv2.resize(r['image'], (512, 512), interpolation = cv2.INTER_CUBIC))
-        cv2.waitKey(0)
+        pass

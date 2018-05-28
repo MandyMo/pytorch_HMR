@@ -1,4 +1,11 @@
 
+'''
+    file:   model.py
+
+    date:   2018_05_03
+    author: zhangxiong(1025679612@qq.com)
+'''
+
 from LinearModel import LinearModel
 import torch.nn as nn
 import numpy as np
@@ -10,13 +17,14 @@ from config import args
 import config
 import Resnet
 from HourGlass import _create_hourglass_net
+from densenet import load_denseNet
 import sys
 
 class ThetaRegressor(LinearModel):
     def __init__(self, fc_layers, use_dropout, drop_prob, use_ac_func, iterations):
         super(ThetaRegressor, self).__init__(fc_layers, use_dropout, drop_prob, use_ac_func)
         self.iterations = iterations
-        batch_size = args.batch_size + args.batch_3d_size
+        batch_size = max(args.batch_size + args.batch_3d_size, args.eval_batch_size)
         mean_theta = np.tile(util.load_mean_theta(), batch_size).reshape((batch_size, -1))
         self.register_buffer('mean_theta', torch.from_numpy(mean_theta).float())
     '''
@@ -47,11 +55,16 @@ class HMRNetBase(nn.Module):
     def _read_configs(self):
         def _check_config():
             encoder_name = args.encoder_network
+            enable_inter_supervions = args.enable_inter_supervision
             feature_count = args.feature_count           
             if encoder_name == 'hourglass':
                 assert args.crop_size == 256
             elif encoder_name == 'resnet50':
                 assert args.crop_size == 224
+                assert not enable_inter_supervions
+            elif encoder_name.startswith('densenet'):
+                assert args.crop_size == 224
+                assert not enable_inter_supervions
             else:
                 msg = 'invalid encoder network, only {} is allowd, got {}'.format(args.allowed_encoder_net, encoder_name)
                 sys.exit(msg)
@@ -77,9 +90,14 @@ class HMRNetBase(nn.Module):
             only resnet50 and hourglass is allowd currently, maybe other encoder will be allowd later.
         '''
         if self.encoder_name == 'resnet50':
+            print('creating resnet50')
             self.encoder = Resnet.load_Res50Model()
         elif self.encoder_name == 'hourglass':
+            print('creating hourglass')
             self.encoder = _create_hourglass_net()
+        elif self.encoder_name.startswith('densenet'):
+            print('creating densenet')
+            self.encoder = load_denseNet(self.encoder_name)
         else:
             assert 0
         '''
@@ -97,6 +115,13 @@ class HMRNetBase(nn.Module):
 
     def forward(self, inputs):
         if self.encoder_name == 'resnet50':
+            feature = self.encoder(inputs)
+            thetas = self.regressor(feature)
+            detail_info = []
+            for theta in thetas:
+                detail_info.append(self._calc_detail_info(theta))
+            return detail_info
+        elif self.encoder_name.startswith('densenet'):
             feature = self.encoder(inputs)
             thetas = self.regressor(feature)
             detail_info = []
