@@ -33,7 +33,18 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
   - install scipy
   - install h5py
   - install opencv-python
-  
+ 
+## result
+<p align="left">
+ <img src="./images/mesh1.png" width="300px">
+</p> 
+<p align="center">
+ <img src="./images/mesh2.png" width="300px">
+</p> 
+<p align="right">
+ <img src="./images/mesh3.png" width="300px">
+</p> 
+
 ## reference papers
 - [Stacked Hourglass Networks for Human Pose Estimation](https://arxiv.org/abs/1603.06937)
 - [SMPL: A Skinned Multi-Person Linear Model](http://files.is.tue.mpg.de/black/papers/SMPL2015.pdf)
@@ -47,3 +58,5 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
 - [coco-2017 dataset](http://cocodataset.org/)
 - [human 3.6m datas](http://vision.imar.ro/human3.6m/description.php)
 - [ai challenger dataset](https://challenger.ai/)
+
+
