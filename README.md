@@ -22,7 +22,7 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
 - [hum3.6m_part_5.zip](https://pan.baidu.com/s/109RwxgpWxEraXzIXf7iYkg)
 - [hum3.6m_anno.zip](https://pan.baidu.com/s/1kCOQ2qzf69RLX3VN4cw5Mw)
 #### 3. unzip the downloaded datasets.
-#### 4. unzip the model.zip
+#### 4. unzip the [model.zip](https://pan.baidu.com/s/1PUv5kUydmx5RG1E0KsQBkw)
 #### 5. config the environment by modify the src/config.py and do_train.sh
 #### 6. run ./do_train.sh directly
 
