@@ -301,22 +301,22 @@ class HMRTrainer(object):
 
         for iter_index in range(config.args.iter_count):
             try:
-                data_2d = loader_2d.next()
+                data_2d = next(loader_2d)
             except StopIteration:
                 loader_2d = iter(self.loader_2d)
-                data_2d = loader_2d.next()
+                data_2d = next(loader_2d)
 
             try:
-                data_3d = loader_3d.next()
+                data_3d = next(loader_3d)
             except StopIteration:
                 loader_3d = iter(self.loader_3d)
-                data_3d = loader_3d.next()
+                data_3d = next(loader_3d)
             
             try:
-                data_mosh = loader_mosh.next()
+                data_mosh = next(loader_mosh)
             except StopIteration:
                 loader_mosh = iter(self.loader_mosh)
-                data_mosh = loader_mosh.next()
+                data_mosh = next(loader_mosh)
             
             image_from_2d, image_from_3d = data_2d['image'], data_3d['image']            
             sample_2d_count, sample_3d_count, sample_mosh_count = image_from_2d.shape[0], image_from_3d.shape[0], data_mosh['theta'].shape[0]
