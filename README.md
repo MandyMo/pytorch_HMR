@@ -55,7 +55,7 @@ HMR is an end-to end framework for reconstructing a full 3D mesh of a human body
 - [ai challenger dataset](https://challenger.ai/)
 
 ### Citation
-If you use this code for your research, please consider citing:
+If you use this code for your research, please cite:
 ```
 @article{zhang2019end,
   title={End-to-end Hand Mesh Recovery from a Monocular RGB Image},
