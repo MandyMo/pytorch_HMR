@@ -6,7 +6,7 @@
 This is a **pytorch** implementation of [End-to-end Recovery of Human Shape and Pose](https://arxiv.org/abs/1712.06584) by *Angjoo Kanazawa, Michael J. Black, David W. Jacobs*, and *Jitendra Malik*, accompanying by some famous human pose estimation networks and datasets. 
 HMR is an end-to end framework for reconstructing a full 3D mesh of a human body from a single RGB image. In contrast to most current methods that compute 2D or 3D joint locations, HMR produce a richer and more useful mesh representation that is parameterized by shape and 3D joint angles. The main objective is to minimize the reprojection loss of keypoints, which allow model to be trained using in-the-wild images that only have ground truth 2D annotations. For visual impact, please visit the [author's original video.](https://www.youtube.com/watch?v=bmMV9aJKa-c)
 
-## training step
+## training step(the following link is not available now because of license)
 #### 1. download the following datasets.
 - [AI challenger keypoint dataset](https://challenger.ai/datasets/keypoint)
 - [lsp 14-keypoint dataset](https://pan.baidu.com/s/1BgKRJfggJcObHXkzHH5I5A)
